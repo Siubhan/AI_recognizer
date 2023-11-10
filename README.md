@@ -12,10 +12,10 @@
 [Jira](https://aaddaa.atlassian.net/jira/software/projects/AD3N/boards/1/timeline?timeline=WEEKS&shared=&atlOrigin=eyJpIjoiNjRlZDE2MGU5ZDYzNDBmNDgxNjFmMTYzODAxZmM3NTAiLCJwIjoiaiJ9)
 
 ## 2. Разработка регламента проведения инспекции
-Порядок проведения инспекций отражен по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/2%20Reglament.md)
+Порядок проведения инспекций отображён по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/2%20Reglament.md)
 
 ## 3. Разработка модели состояний задач
-**UPCOMING**
+Порядок состояния задач отображён по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/3%20Task%20state%20model.md)
 
 ## 4. Разработка презентации проекта
 **UPCOMING**
