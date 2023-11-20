@@ -1,0 +1,1 @@
+## [Презентация вот здесь](https://docs.google.com/presentation/d/1fKZCkUIQflhCd9F7YUuO97Hwwa4OkcZMVxLZGGEod1k/edit?usp=sharing)
