@@ -24,7 +24,6 @@ PROJECT/style.py
 PROJECT/sql_scripts.py
 PROJECT/scanner.py
 PROJECT/registration.py
-PROJECT/one_day.py
 PROJECT/mail.py
 PROJECT/interface.py
 PROJECT/img/scan.png
@@ -34,3 +33,19 @@ PROJECT/__pycache__/style.cpython-36.pyc
 PROJECT/__pycache__/sql_scripts.cpython-36.pyc
 PROJECT/__pycache__/consts.cpython-36.pyc
 .idea/dataSources/83a0ae6d-f382-4c1d-ad25-c5edf92cb1f2.xml
+*.py
+*.py
+PROJECT/frames/visit_frame.py
+PROJECT/frames/scan_frame.py
+*.pyc
+*.py
+PROJECT/employee/sadhsdh/qr.png
+PROJECT/employee/asdfa/qr.png
+PROJECT/employee/asd/qr.png
+PROJECT/employee/asd.asgq/qr.png
+PROJECT/app.py
+PROJECT/frames/visit_frame.py
+PROJECT/frames/scan_frame.py
+*.py
+*.py
+PROJECT/app.py
