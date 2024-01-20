@@ -20,16 +20,19 @@
 Порядок состояния задач отображён по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/3%20Task%20state%20model.md)
 
 ## 4. Разработка презентации проекта
-**UPCOMING**
+Презентация проекта отображена по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/4%20Marketing%20requirement%20specification.md)
+
 
 ## 5. Разработка требований к проекту
-**UPCOMING**
+Требования проекта отображены по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/5%20Software%20requirement%20specification.md)
+
 
 ## 6. Разработка архитектуры проекта
-**UPCOMING**
+Архитектура проекта отображена по  [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/6%20Software%20Design%20Specification.png)
+
 
 ## 7. Разработка программы измерений проекта 
-**UPCOMING**
+Программа измерений проекта отображена по [ссылке](https://github.com/Siubhan/TKRIS_QR_audit/blob/main/DOCS/7%20Measurement.md)
 
 ## 8. Разработка перечня задач проекта
 **UPCOMING**
