@@ -10,12 +10,12 @@ from PROJECT.database import DataBase
 from tkinter import *
 
 
-async def make_qr(datastring, path='/employee/'):
+async def make_qr(datastring, path='\\employee\\'):
     if not os.path.exists(os.getcwd() + path):
         os.makedirs(os.getcwd() + path)
 
     qr = pyqrcode.create(datastring, error='Q', version=5)
-    qr.png(os.getcwd() + path + '/qr.png', scale=7)
+    qr.png(os.getcwd() + path + '\\qr.png', scale=7)
 
 
 class MainFrame(Frame):
@@ -26,7 +26,7 @@ class MainFrame(Frame):
 
         self.columnconfigure(1, weight=1)
         self.rowconfigure(5, weight=1)
-        self.img_logo = PhotoImage(file=os.getcwd() + '/img/logo.png')
+        self.img_logo = PhotoImage(file=os.getcwd() + '\\PROJECT\\img\\logo.png')
 
         label_logo = Label(self, image=self.img_logo)
 
@@ -148,7 +148,7 @@ class MainFrame(Frame):
             try:
                 if surname and name and patronymic and phone and email:
                     self.db.reg_employee(id_emp, fullname, occup, phone, email)
-                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path=r'/passes/employee/' + email))
+                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path=r'\\passes\\employee\\' + email))
 
                     # asyncio.get_event_loop().run_until_complete(send_mail(RECIEVER, path=r'/employee/' + email))
                     # ! Edit messagebox

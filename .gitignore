@@ -22,3 +22,6 @@ PROJECT/__pycache__/sql_scripts.cpython-36.pyc
 PROJECT/__pycache__/consts.cpython-36.pyc
 .idea/dataSources/83a0ae6d-f382-4c1d-ad25-c5edf92cb1f2.xml
 *.pyc
+env/*
+.idea/dataSources.local.xml
+.idea/sqldialects.xml

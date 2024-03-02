@@ -12,7 +12,7 @@ class ScanFrame(Frame):
 
         self.columnconfigure(1, weight=1)
         self.rowconfigure(3, weight=1)
-        self.img_scan = PhotoImage(file=os.getcwd() + '/img/scan.png')
+        self.img_scan = PhotoImage(file=os.getcwd() + '\\PROJECT\\img\\scan.png')
 
         label_scan = Label(self, image=self.img_scan)
 
@@ -27,25 +27,30 @@ class ScanFrame(Frame):
         button_scan.grid(column=0, row=2, padx=5, pady=5)
         self.pack()
 
-    def scan(self):
+    @staticmethod
+    def scan():
         camera_id = 0
         delay = 1
         window_name = 'OpenCV Barcode'
 
         bd = cv2.QRCodeDetector()
         cap = cv2.VideoCapture(camera_id)
-
         while True:
             ret, frame = cap.read()
+            cv2.imshow(window_name, frame)
+
             if ret:
                 decoded_info, points, straight_qrcode = bd.detectAndDecode(frame)
 
                 if points is not None and decoded_info is not None:
                     print("INFO", decoded_info)
                     # ! TODO: add validation
+
             else:
                 print("QR code not detected")
-            if cv2.waitKey(delay) & 0xFF == ord('q'):
+
+            key = cv2.waitKey(delay) & 0xFF
+            if key == ord('q'):
                 break
 
         cv2.destroyWindow(window_name)
