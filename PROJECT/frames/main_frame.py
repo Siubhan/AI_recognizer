@@ -1,23 +1,25 @@
-import asyncio
 import os
 import pyqrcode
 import tkinter.messagebox
-
-# from PROJECT.mail import send_mail
-# from PROJECT.consts import RECEIVER
-
+import random
 from PROJECT.database import DataBase
 from tkinter import *
 
 
-async def make_qr(data_string, path='/employee/'):
+# from PROJECT.mail import send_mail
+# from PROJECT.consts import RECEIVER
+
+
+def make_qr(data_string, path='/employee/'):
     if not os.path.exists(os.getcwd() + path):
         os.makedirs(os.getcwd() + path)
 
     generated_qr = pyqrcode.create(data_string, error='Q', version=5, encoding='utf-8')
-    generated_qr.png(os.getcwd() + path + '\\qr.png', scale=7)
-    
-    # ! add to database
+    try:
+        generated_qr.png(os.getcwd() + path + '\\qr.png', scale=7)
+        return True
+    except Exception:
+        return False
 
 
 class MainFrame(Frame):
@@ -86,7 +88,7 @@ class MainFrame(Frame):
             button_register: Button = Button(top_win, text="Зарегистрировать",
                                              command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
                                                                                patronymic=patronymic.get(),
-                                                                               occup=occupation.get(),
+                                                                               occupation=occupation.get(),
                                                                                phone=phone.get(),
                                                                                email=mail.get(), meta=meta.get(),
                                                                                window=top_win))
@@ -118,7 +120,8 @@ class MainFrame(Frame):
             button_close = Button(top_win, text="Отменить", command=top_win.destroy)
             button_register = Button(top_win, text="Зарегистрировать",
                                      command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
-                                                                       patronymic=patronymic.get(), occup=occupation.get(),
+                                                                       patronymic=patronymic.get(),
+                                                                       occupation=occupation.get(),
                                                                        phone=phone.get(),
                                                                        email=mail.get(), meta=meta.get(),
                                                                        window=top_win))
@@ -142,42 +145,26 @@ class MainFrame(Frame):
             top_win.grab_set()
             top_win.attributes('-topmost', 'true')
 
-    def create_entry(self, surname, name, patronymic, occup, phone, email, meta, window):
+    def create_entry(self, surname, name, patronymic, occupation, phone, email, meta, window):
         fullname = f'{surname} {name} {patronymic}'
-        import random
         id_emp = email + '' + str(random.randint(1, 100))
 
-        if occup:
-            try:
-                if surname and name and patronymic and phone and email:
-                    self.db.reg_employee(id_emp, fullname, occup, phone, email)
-                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path='\\PROJECT\\passes\\employee\\' + email))
-
-                    # asyncio.get_event_loop().run_until_complete(send_mail(RECIEVER, path=r'/employee/' + email))
-                    # ! Edit messagebox
-                    tkinter.messagebox.showinfo('Регистрация сотрудника', 'QR создан и отправлен на указанную почту!')
-                    window.destroy()
-                else:
-                    tkinter.messagebox.showwarning('Регистрация сотрудника', 'Не все поля заполены!')
-
-            except Exception as e:
-                print(e)
-                tkinter.messagebox.showerror('Регистрация сотрудника',
-                                             'QR не был создан, проверьте корректность введенных данных!')
+        if occupation:
+            path = '\\PROJECT\\passes\\employee\\' + email
         else:
-            try:
-                if surname and name and patronymic and phone and email and meta:
-                    self.db.reg_temp(id_emp, fullname, meta, phone, email)
-                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path='\\PROJECT\\passes\\temporary\\' + email))
+            path = '\\PROJECT\\passes\\temporary\\' + email
 
-                    # asyncio.get_event_loop().run_until_complete(send_mail(RECIEVER, path=r'/temporary/' + email))
-                    # ! Edit messagebox
-                    tkinter.messagebox.showinfo('Временный пропуск', 'QR создан и отправлен на указанную почту!', )
-                    window.destroy()
-                else:
-                    tkinter.messagebox.showwarning('Временный пропуск', 'Не все поля заполены!')
+        if surname and name and patronymic and phone and email and (occupation or meta):
+            result = make_qr(id_emp, path=path)
+            if result and occupation:
+                self.db.reg_employee(id_emp, fullname, occupation, phone, email)
+            elif result and meta:
+                self.db.reg_temp(id_emp, fullname, meta, phone, email)
+            else:
+                tkinter.messagebox.showerror('Ошибка генерации кода', 'QR не может быть создан!')
+        else:
+            tkinter.messagebox.showwarning('Регистрация не завершена', 'Не все поля заполены!')
 
-            except Exception as e:
-                print(e)
-                tkinter.messagebox.showerror('Временный пропуск',
-                                             'QR не был создан, проверьте корректность введенных данных!')
+        tkinter.messagebox.showinfo('Регистрация завершена',
+                                    'QR создан и отправлен на указанную почту!')
+        window.destroy()

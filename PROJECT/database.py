@@ -32,6 +32,7 @@ class DataBase:
     def scan_temp(self, visitor_id):
         data = datetime.datetime.now().strftime('%d.%m.%Y')
         time = datetime.datetime.now().strftime('%H:%M:%S')
+        # ? Переделать логику
         self.c.execute(COUNT_VISITORS, (data, visitor_id))
         res = int(self.c.fetchone()[0])
         if res % 2:
@@ -41,7 +42,7 @@ class DataBase:
         self.conn.commit()
 
     def check(self, employee_id):
-        self.c.execute(CHECK_EMPL, (employee_id,))
+        self.c.execute(CHECK_EMPLOYEE, (employee_id,))
         res = self.c.fetchall()
         self.conn.commit()
         if res:

@@ -1,5 +1,4 @@
 import os
-import pyqrcode
 import cv2
 
 from tkinter import *
@@ -29,21 +28,24 @@ class ScanFrame(Frame):
         self.pack()
 
     def scan(self):
-        camera_id = 0
         delay = 1
         window_name = 'OpenCV Barcode'
 
         bd = cv2.QRCodeDetector()
-        cap = cv2.VideoCapture(camera_id)
+        cap = cv2.VideoCapture(0)
         while True:
             ret, frame = cap.read()
             cv2.imshow(window_name, frame)
+
+            key = cv2.waitKey(delay) & 0xFF
+            if key == ord('q'):
+                break
 
             if ret:
                 decoded_info, points, straight_qrcode = bd.detectAndDecode(frame)
 
                 if points is not None and decoded_info is not None:
-                    print("INFO", decoded_info)
+                    # print("INFO", decoded_info)
 
                     if self.parent.db.check(decoded_info):
                         self.parent.db.scan_employee(decoded_info)
@@ -51,15 +53,6 @@ class ScanFrame(Frame):
                     elif self.parent.db.check_temp(decoded_info):
                         self.parent.db.scan_temp(decoded_info)
                     else:
-                        messagebox.showwarning('Некорректный QR-пропуск', 'Сканированный QR код в базе данных отсутствует!')
-
-                    # ! TODO: add validation
-
-            else:
-                print("QR code not detected")
-
-            key = cv2.waitKey(delay) & 0xFF
-            if key == ord('q'):
-                break
-
+                        messagebox.showwarning('Некорректный QR-пропуск',
+                                               'Сканированный QR код в базе данных отсутствует!')
         cv2.destroyWindow(window_name)

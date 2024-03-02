@@ -8,7 +8,7 @@ class VisitFrame(Frame):
         super(VisitFrame, self).__init__()
         self.parent = parent
         self.db = DataBase()
-        # create a notebook
+
         notebook = Notebook(self)
         notebook.pack(pady=10, expand=True)
 
@@ -17,8 +17,6 @@ class VisitFrame(Frame):
         # create frames
         frame_1 = Frame(notebook)
         frame_2 = Frame(notebook)
-
-        # add frames to notebook
 
         notebook.add(frame_1, text='Присутствуют')
         notebook.add(frame_2, text='Отсутствуют')

@@ -68,7 +68,7 @@ INSERT_VISIT = '''INSERT INTO visit(employee_id, visit_day, visit_time, status) 
 
 INSERT_TEMP = '''INSERT INTO visit_temp(visitor_id, visit_time, status) VALUES (?,?,?)'''
 
-CHECK_EMPL = '''SELECT * FROM employee where employee_id = ?'''
+CHECK_EMPLOYEE = '''SELECT * FROM employee where employee_id = ?'''
 
 CHECK_TEMP = '''SELECT * FROM temp where visitor_id = ?'''
 
