@@ -3,19 +3,21 @@ import os
 import pyqrcode
 import tkinter.messagebox
 
-from PROJECT.mail import send_mail
-from PROJECT.consts import RECIEVER
-from PROJECT.database import DataBase
+# from PROJECT.mail import send_mail
+# from PROJECT.consts import RECEIVER
 
+from PROJECT.database import DataBase
 from tkinter import *
 
 
-async def make_qr(datastring, path='\\employee\\'):
+async def make_qr(data_string, path='/employee/'):
     if not os.path.exists(os.getcwd() + path):
         os.makedirs(os.getcwd() + path)
 
-    qr = pyqrcode.create(datastring, error='Q', version=5)
-    qr.png(os.getcwd() + path + '\\qr.png', scale=7)
+    generated_qr = pyqrcode.create(data_string, error='Q', version=5, encoding='utf-8')
+    generated_qr.png(os.getcwd() + path + '\\qr.png', scale=7)
+    
+    # ! add to database
 
 
 class MainFrame(Frame):
@@ -32,16 +34,16 @@ class MainFrame(Frame):
 
         label_logo.grid(column=0, row=0, padx=5, pady=5)
 
-        button_scan = Button(self, text="Сканирование", width=20, command=self.parent.set_scanner)
+        button_scan = Button(self, text="Сканирование", width=30, command=self.parent.set_scanner)
         button_scan.grid(column=0, row=1, padx=5, pady=5)
 
-        button_audit = Button(self, text="Сотрудники | Посетители", width=20, command=self.parent.set_visit)
+        button_audit = Button(self, text="Сотрудники | Посетители", width=30, command=self.parent.set_visit)
         button_audit.grid(column=0, row=2, padx=5, pady=5)
 
-        button_reg = Button(self, text="Регистрация сотрудника", width=20, command=self.sign_in)
+        button_reg = Button(self, text="Регистрация сотрудника", width=30, command=self.sign_in)
         button_reg.grid(column=0, row=3, padx=5, pady=5)
 
-        button_pass = Button(self, text="Временный пропуск", width=20,
+        button_pass = Button(self, text="Создать временный пропуск", width=30,
                              command=lambda: self.sign_in(is_employee=False))
         button_pass.grid(column=0, row=4, padx=5, pady=5)
 
@@ -57,48 +59,49 @@ class MainFrame(Frame):
         name = StringVar()
         patronymic = StringVar()
         phone = StringVar()
-        occup = StringVar()
+        occupation = StringVar()
         meta = StringVar()
         mail = StringVar()
 
-        label_surname = Label(top_win, text='Фамилия')
-        label_name = Label(top_win, text='Имя')
-        label_patronymic = Label(top_win, text='Отчество')
-        label_phone = Label(top_win, text='Телефон')
-        label_mail = Label(top_win, text='E-mail')
-        label_occup = Label(top_win, text='Должность')
-        label_meta = Label(top_win, text='Цель визита')
+        label_surname: Label = Label(top_win, text='Фамилия')
+        label_name: Label = Label(top_win, text='Имя')
+        label_patronymic: Label = Label(top_win, text='Отчество')
+        label_phone: Label = Label(top_win, text='Телефон')
+        label_mail: Label = Label(top_win, text='E-mail')
+        label_occupation: Label = Label(top_win, text='Должность')
+        label_meta: Label = Label(top_win, text='Цель визита')
 
         # ! нет валидации на полях
         entry_surname = Entry(top_win, textvariable=surname)
         entry_name = Entry(top_win, textvariable=name)
         entry_patronymic = Entry(top_win, textvariable=patronymic)
         entry_phone = Entry(top_win, textvariable=phone)
-        entry_occup = Entry(top_win, textvariable=occup)
+        entry_occupation = Entry(top_win, textvariable=occupation)
         entry_meta = Entry(top_win, textvariable=meta)
         entry_mail = Entry(top_win, textvariable=mail)
 
         if is_employee:
             top_win.wm_title("Регистрация сотрудника")
-            button_close = Button(top_win, text="Отменить", command=top_win.destroy)
-            button_register = Button(top_win, text="Зарегистрировать",
-                                     command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
-                                                                       patronymic=patronymic.get(), occup=occup.get(),
-                                                                       phone=phone.get(),
-                                                                       email=mail.get(), meta=meta.get(),
-                                                                       window=top_win))
+            button_close: Button = Button(top_win, text="Отменить", command=top_win.destroy)
+            button_register: Button = Button(top_win, text="Зарегистрировать",
+                                             command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
+                                                                               patronymic=patronymic.get(),
+                                                                               occup=occupation.get(),
+                                                                               phone=phone.get(),
+                                                                               email=mail.get(), meta=meta.get(),
+                                                                               window=top_win))
 
             label_surname.grid(row=0, column=0, padx=5, pady=5)
             label_name.grid(row=1, column=0, padx=5, pady=5)
             label_patronymic.grid(row=2, column=0, padx=5, pady=5)
-            label_occup.grid(row=3, column=0, padx=5, pady=5)
+            label_occupation.grid(row=3, column=0, padx=5, pady=5)
             label_phone.grid(row=4, column=0, padx=5, pady=5)
             label_mail.grid(row=5, column=0, padx=5, pady=5)
 
             entry_surname.grid(row=0, column=1, padx=5, pady=5)
             entry_name.grid(row=1, column=1, padx=5, pady=5)
             entry_patronymic.grid(row=2, column=1, padx=5, pady=5)
-            entry_occup.grid(row=3, column=1, padx=5, pady=5)
+            entry_occupation.grid(row=3, column=1, padx=5, pady=5)
             entry_phone.grid(row=4, column=1, padx=5, pady=5)
             entry_mail.grid(row=5, column=1, padx=5, pady=5)
             button_register.grid(row=6, column=1, padx=5, pady=5)
@@ -115,7 +118,7 @@ class MainFrame(Frame):
             button_close = Button(top_win, text="Отменить", command=top_win.destroy)
             button_register = Button(top_win, text="Зарегистрировать",
                                      command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
-                                                                       patronymic=patronymic.get(), occup=occup.get(),
+                                                                       patronymic=patronymic.get(), occup=occupation.get(),
                                                                        phone=phone.get(),
                                                                        email=mail.get(), meta=meta.get(),
                                                                        window=top_win))
@@ -148,7 +151,7 @@ class MainFrame(Frame):
             try:
                 if surname and name and patronymic and phone and email:
                     self.db.reg_employee(id_emp, fullname, occup, phone, email)
-                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path=r'\\passes\\employee\\' + email))
+                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path='\\PROJECT\\passes\\employee\\' + email))
 
                     # asyncio.get_event_loop().run_until_complete(send_mail(RECIEVER, path=r'/employee/' + email))
                     # ! Edit messagebox
@@ -165,7 +168,7 @@ class MainFrame(Frame):
             try:
                 if surname and name and patronymic and phone and email and meta:
                     self.db.reg_temp(id_emp, fullname, meta, phone, email)
-                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path=r'/passes/temporary/' + email))
+                    asyncio.get_event_loop().run_until_complete(make_qr(id_emp, path='\\PROJECT\\passes\\temporary\\' + email))
 
                     # asyncio.get_event_loop().run_until_complete(send_mail(RECIEVER, path=r'/temporary/' + email))
                     # ! Edit messagebox
