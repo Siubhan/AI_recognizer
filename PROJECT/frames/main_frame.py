@@ -1,4 +1,6 @@
 import os
+import tkinter
+
 import pyqrcode
 import tkinter.messagebox
 import random
@@ -39,19 +41,15 @@ class MainFrame(Frame):
         button_scan = Button(self, text="Сканирование", width=30, command=self.parent.set_scanner)
         button_scan.grid(column=0, row=1, padx=5, pady=5)
 
-        button_audit = Button(self, text="Сотрудники | Посетители", width=30, command=self.parent.set_visit)
+        button_audit = Button(self, text="Статус на объекте", width=30, command=self.parent.set_visit)
         button_audit.grid(column=0, row=2, padx=5, pady=5)
 
-        button_reg = Button(self, text="Регистрация сотрудника", width=30, command=self.sign_in)
+        button_reg = Button(self, text="Создание пропуска", width=30, command=self.sign_in)
         button_reg.grid(column=0, row=3, padx=5, pady=5)
-
-        button_pass = Button(self, text="Создать временный пропуск", width=30,
-                             command=lambda: self.sign_in(is_employee=False))
-        button_pass.grid(column=0, row=4, padx=5, pady=5)
 
         self.pack()
 
-    def sign_in(self, is_employee=True):
+    def sign_in(self):
         top_win = Toplevel()
         top_win.geometry('400x300+100+100')
         top_win.columnconfigure(2, weight=1)
@@ -61,8 +59,6 @@ class MainFrame(Frame):
         name = StringVar()
         patronymic = StringVar()
         phone = StringVar()
-        occupation = StringVar()
-        meta = StringVar()
         mail = StringVar()
 
         label_surname: Label = Label(top_win, text='Фамилия')
@@ -70,101 +66,65 @@ class MainFrame(Frame):
         label_patronymic: Label = Label(top_win, text='Отчество')
         label_phone: Label = Label(top_win, text='Телефон')
         label_mail: Label = Label(top_win, text='E-mail')
-        label_occupation: Label = Label(top_win, text='Должность')
-        label_meta: Label = Label(top_win, text='Цель визита')
 
         # ! нет валидации на полях
         entry_surname = Entry(top_win, textvariable=surname)
         entry_name = Entry(top_win, textvariable=name)
         entry_patronymic = Entry(top_win, textvariable=patronymic)
         entry_phone = Entry(top_win, textvariable=phone)
-        entry_occupation = Entry(top_win, textvariable=occupation)
-        entry_meta = Entry(top_win, textvariable=meta)
         entry_mail = Entry(top_win, textvariable=mail)
+        user_type = tkinter.IntVar()
+        check_type = Checkbutton(top_win, text='Является посетителем?', onvalue=1, variable=user_type)
 
-        if is_employee:
-            top_win.wm_title("Регистрация сотрудника")
-            button_close: Button = Button(top_win, text="Отменить", command=top_win.destroy)
-            button_register: Button = Button(top_win, text="Зарегистрировать",
-                                             command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
-                                                                               patronymic=patronymic.get(),
-                                                                               occupation=occupation.get(),
-                                                                               phone=phone.get(),
-                                                                               email=mail.get(), meta=meta.get(),
-                                                                               window=top_win))
+        top_win.wm_title("Регистрация сотрудника")
+        button_close: Button = Button(top_win, text="Отменить", command=top_win.destroy)
+        button_register: Button = Button(top_win, text="Зарегистрировать",
+                                         command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
+                                                                           patronymic=patronymic.get(),
+                                                                           user_type=user_type.get() + 1,
+                                                                           phone=phone.get(),
+                                                                           email=mail.get(),
+                                                                           window=top_win))
 
-            label_surname.grid(row=0, column=0, padx=5, pady=5)
-            label_name.grid(row=1, column=0, padx=5, pady=5)
-            label_patronymic.grid(row=2, column=0, padx=5, pady=5)
-            label_occupation.grid(row=3, column=0, padx=5, pady=5)
-            label_phone.grid(row=4, column=0, padx=5, pady=5)
-            label_mail.grid(row=5, column=0, padx=5, pady=5)
+        label_surname.grid(row=0, column=0, padx=5, pady=5)
+        label_name.grid(row=1, column=0, padx=5, pady=5)
+        label_patronymic.grid(row=2, column=0, padx=5, pady=5)
+        label_phone.grid(row=3, column=0, padx=5, pady=5)
+        label_mail.grid(row=4, column=0, padx=5, pady=5)
+        check_type.grid(row=5, column=0, padx=5, pady=5)
 
-            entry_surname.grid(row=0, column=1, padx=5, pady=5)
-            entry_name.grid(row=1, column=1, padx=5, pady=5)
-            entry_patronymic.grid(row=2, column=1, padx=5, pady=5)
-            entry_occupation.grid(row=3, column=1, padx=5, pady=5)
-            entry_phone.grid(row=4, column=1, padx=5, pady=5)
-            entry_mail.grid(row=5, column=1, padx=5, pady=5)
-            button_register.grid(row=6, column=1, padx=5, pady=5)
-            button_close.grid(row=6, column=0, padx=5, pady=5)
-            button_register.grid(row=6, column=1, padx=5, pady=5)
-            button_close.grid(row=6, column=0, padx=5, pady=5)
+        entry_surname.grid(row=0, column=1, padx=5, pady=5)
+        entry_name.grid(row=1, column=1, padx=5, pady=5)
+        entry_patronymic.grid(row=2, column=1, padx=5, pady=5)
+        entry_phone.grid(row=3, column=1, padx=5, pady=5)
+        entry_mail.grid(row=4, column=1, padx=5, pady=5)
 
-            top_win.grab_set()
-            top_win.attributes('-topmost', 'true')
+        button_register.grid(row=6, column=1, padx=5, pady=5)
+        button_close.grid(row=6, column=0, padx=5, pady=5)
+        button_register.grid(row=6, column=1, padx=5, pady=5)
+        button_close.grid(row=6, column=0, padx=5, pady=5)
 
-        else:
-            top_win.wm_title("Временный пропуск")
+        top_win.grab_set()
+        top_win.attributes('-topmost', 'true')
 
-            button_close = Button(top_win, text="Отменить", command=top_win.destroy)
-            button_register = Button(top_win, text="Зарегистрировать",
-                                     command=lambda: self.create_entry(surname=surname.get(), name=name.get(),
-                                                                       patronymic=patronymic.get(),
-                                                                       occupation=occupation.get(),
-                                                                       phone=phone.get(),
-                                                                       email=mail.get(), meta=meta.get(),
-                                                                       window=top_win))
-
-            label_surname.grid(row=0, column=0, padx=5, pady=5)
-            label_name.grid(row=1, column=0, padx=5, pady=5)
-            label_patronymic.grid(row=2, column=0, padx=5, pady=5)
-            label_meta.grid(row=3, column=0, padx=5, pady=5)
-            label_phone.grid(row=4, column=0, padx=5, pady=5)
-            label_mail.grid(row=5, column=0, padx=5, pady=5)
-
-            entry_surname.grid(row=0, column=1, padx=5, pady=5)
-            entry_name.grid(row=1, column=1, padx=5, pady=5)
-            entry_patronymic.grid(row=2, column=1, padx=5, pady=5)
-            entry_meta.grid(row=3, column=1, padx=5, pady=5)
-            entry_phone.grid(row=4, column=1, padx=5, pady=5)
-            entry_mail.grid(row=5, column=1, padx=5, pady=5)
-            button_register.grid(row=6, column=1, padx=5, pady=5)
-            button_close.grid(row=6, column=0, padx=5, pady=5)
-
-            top_win.grab_set()
-            top_win.attributes('-topmost', 'true')
-
-    def create_entry(self, surname, name, patronymic, occupation, phone, email, meta, window):
+    def create_entry(self, surname, name, patronymic, user_type, phone, email, window):
         fullname = f'{surname} {name} {patronymic}'
-        id_emp = email + '' + str(random.randint(1, 100))
+        id_emp = email + '' + str(random.randint(1, 1000))
 
-        if occupation:
+        if user_type == 1:
             path = '\\PROJECT\\passes\\employee\\' + email
         else:
             path = '\\PROJECT\\passes\\temporary\\' + email
 
-        if surname and name and patronymic and phone and email and (occupation or meta):
+        if surname and name and patronymic and phone and email:
             result = make_qr(id_emp, path=path)
-            if result and occupation:
-                self.db.reg_employee(id_emp, fullname, occupation, phone, email)
-            elif result and meta:
-                self.db.reg_temp(id_emp, fullname, meta, phone, email)
+            if result:
+                self.db.register_user(id_emp, fullname, user_type, phone, email)
+                tkinter.messagebox.showinfo('Регистрация завершена',
+                                            'QR создан и отправлен на указанную почту!')
             else:
-                tkinter.messagebox.showerror('Ошибка генерации кода', 'QR не может быть создан!')
+                tkinter.messagebox.showwarning('Ошибка генерации QR-кода', 'QR-код не был создан!')
         else:
             tkinter.messagebox.showwarning('Регистрация не завершена', 'Не все поля заполены!')
 
-        tkinter.messagebox.showinfo('Регистрация завершена',
-                                    'QR создан и отправлен на указанную почту!')
         window.destroy()

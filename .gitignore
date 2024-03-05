@@ -17,5 +17,6 @@ PROJECT/__pycache__/consts.cpython-36.pyc
 *.pyc
 /env/*
 .idea/*
-
 *.xml
+PROJECT/history.py
+PROJECT/passes/*
