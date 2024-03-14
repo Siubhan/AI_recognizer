@@ -36,7 +36,7 @@ class ScanFrame(Frame):
 
         while True:
             ret, frame = cap.read()
-            cv2.imshow(window_name, frame)
+            # cv2.imshow(window_name, frame)
 
             key = cv2.waitKey(delay) & 0xFF
 
@@ -52,9 +52,9 @@ class ScanFrame(Frame):
                         messagebox.showwarning('Пропуск корректен',
                                                'Пропуск успешно распознан!')
                         break
-                    else:
-                        messagebox.showwarning('Некорректный QR-пропуск',
-                                               'Сканированный QR код в базе данных отсутствует!')
+                    # else:
+                    #     messagebox.showwarning('Некорректный QR-пропуск',
+                    #                            'Сканированный QR код в базе данных отсутствует!')
 
-        cv2.destroyWindow(window_name)
+        # cv2.destroyWindow(window_name)
         cap.release()
