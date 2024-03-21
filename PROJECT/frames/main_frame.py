@@ -32,28 +32,30 @@ class MainFrame(Frame):
 
         self.columnconfigure(1, weight=1)
         self.rowconfigure(5, weight=1)
+
         self.img_logo = PhotoImage(file=os.getcwd() + '\\PROJECT\\img\\logo.png')
 
         label_logo = Label(self, image=self.img_logo)
 
         label_logo.grid(column=0, row=0, padx=5, pady=5)
 
-        button_scan = Button(self, text="Сканирование", width=30, command=self.parent.set_scanner)
+        button_scan = Button(self, text='Сканирование', width=30, command=self.parent.set_scanner)
         button_scan.grid(column=0, row=1, padx=5, pady=5)
 
-        button_audit = Button(self, text="Статус на объекте", width=30, command=self.parent.set_visit)
+        button_audit = Button(self, text='Статус на объекте', width=30, command=self.parent.set_visit)
         button_audit.grid(column=0, row=2, padx=5, pady=5)
 
-        button_reg = Button(self, text="Создание пропуска", width=30, command=self.sign_in)
+        button_reg = Button(self, text='Создание пропуска', width=30, command=self.sign_in)
         button_reg.grid(column=0, row=3, padx=5, pady=5)
 
         self.pack()
 
     def sign_in(self):
         top_win = Toplevel()
-        top_win.geometry('400x300+100+100')
+        top_win.geometry('350x250+100+100')
         top_win.columnconfigure(2, weight=1)
         top_win.rowconfigure(7, weight=1)
+        top_win.resizable(False, False)
 
         surname = StringVar()
         name = StringVar()
@@ -107,6 +109,22 @@ class MainFrame(Frame):
         top_win.grab_set()
         top_win.attributes('-topmost', 'true')
 
+    @staticmethod
+    def validate_email(value):
+        import re
+        pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        if re.fullmatch(pattern, value) is None:
+            return False
+
+        return True
+
+    @staticmethod
+    def validate_phone(value):
+        if value.isdigit() is False and len(value) != 11:
+            return False
+
+        return True
+
     def create_entry(self, surname, name, patronymic, user_type, phone, email, window):
         fullname = f'{surname} {name} {patronymic}'
         id_emp = email + '' + str(random.randint(1, 1000))
@@ -116,15 +134,16 @@ class MainFrame(Frame):
         else:
             path = '\\PROJECT\\passes\\temporary\\' + email
 
-        if surname and name and patronymic and phone and email:
+        if surname and name and patronymic and self.validate_phone(phone) and self.validate_email(email):
             result = make_qr(id_emp, path=path)
             if result:
                 self.db.register_user(id_emp, fullname, user_type, phone, email)
                 tkinter.messagebox.showinfo('Регистрация завершена',
                                             'QR создан и отправлен на указанную почту!')
+                window.destroy()
             else:
                 tkinter.messagebox.showwarning('Ошибка генерации QR-кода', 'QR-код не был создан!')
         else:
-            tkinter.messagebox.showwarning('Регистрация не завершена', 'Не все поля заполены!')
+            tkinter.messagebox.showwarning('Регистрация не завершена', 'Проверьте корректность вводимых данных!')
 
-        window.destroy()
+

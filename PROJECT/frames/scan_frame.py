@@ -16,10 +16,10 @@ class ScanFrame(Frame):
 
         label_scan = Label(self, image=self.img_scan)
 
-        button_scan = Button(self, text="Сканировать", width=20,
+        button_scan = Button(self, text='Сканировать', width=20,
                              command=self.scan)
 
-        button_prev = Button(self, text="Назад", width=20,
+        button_prev = Button(self, text='Назад', width=20,
                              command=self.parent.set_main)
 
         button_prev.grid(column=0, row=0, padx=5, pady=5)

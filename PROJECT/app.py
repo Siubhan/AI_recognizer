@@ -10,8 +10,9 @@ from frames.visit_frame import VisitFrame
 class Interface(Tk):
     def __init__(self):
         super(Interface, self).__init__()
-        self.title("Alternative")
+        self.title('Alternative')
         self.geometry('800x600')
+        self.resizable(False, False)
 
         self.db = DataBase()
         self.current_frame = MainFrame(self)

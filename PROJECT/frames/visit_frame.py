@@ -12,7 +12,7 @@ class VisitFrame(Frame):
         notebook = Notebook(self)
         notebook.pack(pady=10, expand=True)
 
-        button_prev = Button(self, text="Назад", width=20,
+        button_prev = Button(self, text='Назад', width=20,
                              command=self.parent.set_main)
 
         frame_1 = Frame(notebook)
@@ -64,7 +64,7 @@ class VisitFrame(Frame):
 
     def fill_tables(self, table_here, table_absent, who=1):
         list_users = self.db.find_users(who)
-        print(list_users)
+
         if list_users is not None:
             for user in list_users:
                 if user[4] == 0:
